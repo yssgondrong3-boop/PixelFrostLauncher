@@ -80,7 +80,7 @@ private fun FrostPreviewScreen() {
                 modifier = Modifier.fillMaxSize().padding(20.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text("PixelFrost Tahap 1: kaca buram aktif")
+                Text("PixelFrost Tahap 1: kaca buram aktif", color = Color.White)
             }
         }
     }
