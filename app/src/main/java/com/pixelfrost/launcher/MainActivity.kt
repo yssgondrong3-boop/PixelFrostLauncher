@@ -3,6 +3,7 @@ package com.pixelfrost.launcher
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -36,7 +37,6 @@ private fun FrostPreviewScreen() {
     val hazeState = rememberHazeState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // Latar sementara sebagai pengganti wallpaper. Lapisan ini yang akan diburamkan.
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,7 +46,7 @@ private fun FrostPreviewScreen() {
             Box(
                 Modifier
                     .align(Alignment.TopStart)
-                    .padding(start = 0.dp, top = 80.dp)
+                    .padding(top = 80.dp)
                     .size(260.dp)
                     .clip(CircleShape)
                     .background(Color(0xFF378ADD)),
@@ -68,7 +68,6 @@ private fun FrostPreviewScreen() {
             )
         }
 
-        // Kartu kaca di tengah layar
         FrostContainer(
             hazeState = hazeState,
             modifier = Modifier
