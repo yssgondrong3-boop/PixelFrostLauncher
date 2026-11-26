@@ -1,6 +1,5 @@
 package com.pixelfrost.launcher
 
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -26,6 +25,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -71,6 +72,9 @@ private fun LauncherScreen() {
         value = withContext(Dispatchers.IO) { loadLaunchableApps(context) }
     }
     var showDrawer by remember { mutableStateOf(false) }
+    var query by remember { mutableStateOf("") }
+
+    val filteredApps = apps.filter { it.label.contains(query, ignoreCase = true) }
 
     BackHandler(enabled = showDrawer) {
         showDrawer = false
@@ -92,7 +96,6 @@ private fun LauncherScreen() {
                 }
             },
     ) {
-        // Wallpaper sementara, sumber blur untuk kaca
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -134,13 +137,39 @@ private fun LauncherScreen() {
                     .fillMaxSize()
                     .padding(start = 12.dp, end = 12.dp, top = 48.dp, bottom = 12.dp),
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(4),
-                    contentPadding = PaddingValues(16.dp),
-                    modifier = Modifier.fillMaxSize(),
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
                 ) {
-                    items(apps, key = { it.packageName }) { app ->
-                        AppItem(app = app, onClick = { launch(app.packageName) })
+                    TextField(
+                        value = query,
+                        onValueChange = { query = it },
+                        placeholder = {
+                            Text("Cari aplikasi", color = Color.White.copy(alpha = 0.6f))
+                        },
+                        singleLine = true,
+                        shape = RoundedCornerShape(24.dp),
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color.White,
+                            unfocusedTextColor = Color.White,
+                            cursorColor = Color.White,
+                            focusedContainerColor = Color.White.copy(alpha = 0.12f),
+                            unfocusedContainerColor = Color.White.copy(alpha = 0.12f),
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent,
+                        ),
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(4),
+                        contentPadding = PaddingValues(top = 4.dp),
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        items(filteredApps, key = { it.packageName }) { app ->
+                            AppItem(app = app, onClick = { launch(app.packageName) })
+                        }
                     }
                 }
             }
